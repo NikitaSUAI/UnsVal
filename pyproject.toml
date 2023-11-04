@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "unsval"
+version = "0.1.0"
+description = ""
+authors = ["Fucking rabble"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+black = "^23.10.1"
+isort = "^5.12.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
