@@ -1,59 +1,46 @@
-import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { useState } from "react";
+import "../Styles/styles.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const AuthForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
- const handleSubmit = (e) => {
-    e.preventDefault();
-    // Дополнительная логикаработки отправки формы
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="formEmail">
-        <Form.Label>Email</Form.Label>
-        <Form.Control 
-          name="email"
-          placeholder="Введите ваш email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </Form.Group>
+    <div id="login-form">
+      <h1>Login</h1>
+      <form>
+        <label htmlFor="username">Username:</label>
+        <input type="text" id="username" name="username" className="input-field" />
+        <label htmlFor="password">Password:</label>
+        <div className="password-input">
+          <input
+            type={showPassword ? "text" : "password"}
+            id="password"
+            name="password"
+            className="input-field"
+          />
+          <button type="button" onClick={handleTogglePassword}>
+            {showPassword ? (
+              <FontAwesomeIcon icon={faEyeSlash} />
+            ) : (
+              <FontAwesomeIcon icon={faEye} />
+            )}
+          </button>
+        </div>
+        <input type="submit" value="Submit" />
 
-      <Form.Group controlId="formPassword">
-        <Form.Label>Пароль</Form.Label>
-       <Form.Control
-          type="password"
-          placeholder="Введите ваш пароль"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </Form.Group>
-
-      {!isRegistering && (
-        <Button variant="primary" type="submit">
-          Войти
-        </Button>
-      )}
-
-      {isRegistering && (
-        <Button variant="primary" type="submit">
-          Зарегистрироваться
-        </Button>
-      )}
-
-      <Button
-        variant="link"
-        onClick={() => setIsRegistering(!isRegistering)}
-      >
-        {isRegistering ? 'Уже есть аккаунт? Войти' : 'Ещё не зарегистрированы?'}
-      </Button>
-    </Form>
+        <br></br><br></br>
+        <p className="signup-link">
+          New on our platform?
+          <a href="/registration">Create an account</a>  {/* Замените # на ссылку на регистрацию */}
+        </p>
+      </form>
+    </div>
   );
 };
 
