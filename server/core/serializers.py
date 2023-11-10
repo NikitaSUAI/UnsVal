@@ -7,8 +7,13 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name',
-                  'last_name', 'email', 'date_joined']
+        fields = ['username', 'password', 'email']
+
+
+class GetAnswerModelSerializer(Serializer):
+
+    userId = CharField(required=True)
+    line = CharField(required=True)
 
 
 class IssueTokenRequestSerializer(Serializer):
