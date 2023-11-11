@@ -10,7 +10,8 @@ from core.serializers import IssueTokenRequestSerializer, GetAnswerModelSerializ
 #             "answer": "new_answer"
 #         }
 #     ],
-#     "key": "fefaa43c053605b8299aedf5defbfe8f6e241c6c"
+#     "key": "fefaa43c053605b8299aedf5defbfe8f6e241c6c",
+#     "userId": 1
 # }
 STATUS_200_SCHEMA = openapi.Schema(
     type=openapi.TYPE_OBJECT,
