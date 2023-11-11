@@ -6,14 +6,14 @@ class Dialogs(models.Model):
     dialog_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
 
-    user_id = models.UUIDField()
+    user_id = models.BigIntegerField()
 
     question = models.CharField(max_length=4000)
     answer = models.CharField(max_length=4000)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True)
 
     def __str__(self):
         return f'{self.question} {self.answer}'
@@ -28,7 +28,7 @@ class StopThemes(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True)
 
     def __str__(self):
         return f'{self.theme}'
