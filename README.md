@@ -22,7 +22,7 @@ docker run --name server -e POSTGRES_PASSWORD=demo -e POSTGRES_USER=demo -e POST
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
-.venv/bin/pip install -r server/r.txt
+.venv/bin/pip install -r r.txt
 
 python manage.py migrate
 ```

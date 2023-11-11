@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
 from core.utils import get_token
 from core.swagger_schema import LOG_IN_SCHEME, GET_ANSWER_SHEME, REGISTRATION_SCHEME
+from core.models import Dialogs
 
 
 @swagger_auto_schema(**LOG_IN_SCHEME)
@@ -22,9 +23,23 @@ def log_in(request: Request) -> Response:
     serializer = IssueTokenRequestSerializer(data=request.data)
     if serializer.is_valid():
         val_data = serializer.validated_data
+        username = val_data.get('username')
+        password = val_data.get('password')
 
-        return get_token(username=val_data.get('username'),
-                         password=val_data.get('password'))
+        try:
+            user_id = User.objects.filter(
+                username=username)[0].id
+        except Exception as e:
+            user_id = None
+            raise Exception('User does not exists!')
+
+        history = list(Dialogs.objects.filter(
+            user_id=user_id).order_by('created_at').values('question', 'answer'))
+
+        token = get_token(username=username,
+                          password=password)
+
+        return Response({'history': history, **token, 'userId': user_id})
 
     else:
         return Response(serializer.errors, status=400)
@@ -38,18 +53,23 @@ def get_answer(request: Request) -> Response:
     """
     Get answer from model
     """
-    # line = None
-    # userId = None
 
     if request.method != 'GET':
         raise NotFound('Endpoint does not exists')
 
-    serializer = GetAnswerModelSerializer(data=request.data)
+    serializer = GetAnswerModelSerializer(data=request.query_params)
     if serializer.is_valid():
         pass
-        # val_data = serializer.validated_data
-        # line = val_data.get('line')
-        # userId = val_data.get('userId')
+        val_data = serializer.validated_data
+        line = val_data.get('line')
+        userId = val_data.get('userId')
+        # -------------псевдо код-----------
+        # new_answer = model.get_answer(line)
+        # ----------------------------------
+        add_dialogs = Dialogs(
+            user_id=userId, question=line, answer='new_answer')
+        add_dialogs.save()
+        # return Response({'answer': new_answer})
     else:
         return Response(serializer.errors, status=400)
 
@@ -83,8 +103,20 @@ def registration(request: Request) -> Response:
 
         user.save()
 
+        try:
+            user_id = User.objects.filter(
+                username=username)[0].id
+        except Exception as e:
+            user_id = None
+            raise Exception('User does not exists!')
+
+        history = list(Dialogs.objects.filter(
+            user_id=user_id).order_by('created_at').values('question', 'answer'))
+
+        token = get_token(username=username,
+                          password=password)
+
+        return Response({'history': history, **token, 'userId': user_id})
+
     else:
         return Response(serializer.errors, status=400)
-
-    return get_token(username=val_data.get('username'),
-                     password=val_data.get('password'))
